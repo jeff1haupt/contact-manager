@@ -15,7 +15,22 @@ const contacts = [
 ];
 
 router.get('/contacts', (req, res) => {
-    res.send('It works!');
+    res.render('index', { contacts });
+});
+
+router.get('/contacts/:id', (req, res) => {
+    const { id } = req.params;
+    const contact = contacts.find(c => c.id === Number(id));
+
+    if (req.headers['hx-request']) {
+        res.send(`
+          <h2>${contact.name}</h2>
+          <p><strong>Name:</strong> ${contact.name}</p>
+          <p><strong>Email:</strong> ${contact.email}</p>
+        `);
+      } else {
+        res.render('index', { contacts });
+      }
 });
 
 module.exports = router;
